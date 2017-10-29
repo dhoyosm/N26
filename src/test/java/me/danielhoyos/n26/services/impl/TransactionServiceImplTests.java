@@ -13,9 +13,13 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -38,11 +42,10 @@ public class TransactionServiceImplTests {
     @Before
     public void setup() {
         initMocks(this);
-        //mockStatic(System.class);
     }
 
     @Test
-    public void testCreateGame() {
+    public void testCreateTransaction() {
         Transaction input = new Transaction(10.2, 1234L);
 
         when(transactionRepository.save(any(Transaction.class))).thenReturn(input);
@@ -53,5 +56,34 @@ public class TransactionServiceImplTests {
 
         assertEquals(new Double(10.2), result.getAmount());
         assertEquals(new Long(1234L), result.getTimestamp());
+    }
+
+    @Test
+    public void testGetTransactions() {
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(new Transaction());
+        transactions.add(new Transaction());
+
+        when(transactionRepository.findAll()).thenReturn(transactions);
+
+        List<Transaction> result = transactionService.getTransactions();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+    }
+
+    @Test
+    public void testGetLastMinuteTransaction() {
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(new Transaction());
+        transactions.add(new Transaction());
+
+        when(transactionRepository.findByTimestampGreaterThanEqual(anyLong())).thenReturn(transactions);
+
+        List<Transaction> result = transactionService.getLastMinuteTransactions(new Long(0));
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals(1, 1);
     }
 }

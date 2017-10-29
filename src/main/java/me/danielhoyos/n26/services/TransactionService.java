@@ -12,4 +12,5 @@ import java.util.List;
 public interface TransactionService {
     Transaction saveTransaction(Transaction transaction);
     List<Transaction> getTransactions();
+    List<Transaction> getLastMinuteTransactions(Long lowerTimestamp);
 }

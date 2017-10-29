@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.validation.Valid;
 
 /**
  * @author Daniel Hoyos
@@ -28,7 +27,7 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> saveTransaction(@RequestBody Transaction transaction) {
+    public ResponseEntity<String> saveTransaction(@Valid @RequestBody Transaction transaction) {
 
         HttpStatus httpStatus = HttpStatus.NO_CONTENT;
 
@@ -42,11 +41,4 @@ public class TransactionController {
         return new ResponseEntity<>("", httpStatus);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<Transaction>> retrieveTransactions() {
-
-        List<Transaction> transactions = transactionService.getTransactions();
-
-        return new ResponseEntity<>(transactions, HttpStatus.OK);
-    }
 }

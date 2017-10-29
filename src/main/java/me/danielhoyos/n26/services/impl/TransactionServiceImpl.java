@@ -28,4 +28,9 @@ public class TransactionServiceImpl implements TransactionService {
     public List<Transaction> getTransactions() {
         return transactionRepository.findAll();
     }
+
+    @Override
+    public List<Transaction> getLastMinuteTransactions(Long lowerTimestamp) {
+        return transactionRepository.findByTimestampGreaterThanEqual(lowerTimestamp);
+    }
 }
